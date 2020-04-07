@@ -2,6 +2,11 @@
 
 require 'sinatra'
 
-get '/' do
-  'Hello World'
+configure { set :server, :puma }
+
+# Main App
+class App < Sinatra::Base
+  get '/' do
+    'Hello world!'
+  end
 end
