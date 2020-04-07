@@ -7,6 +7,6 @@ configure { set :server, :puma }
 # Main App
 class App < Sinatra::Base
   get '/' do
-    'Hello world!'
+    erb :layout
   end
 end
