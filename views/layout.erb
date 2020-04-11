@@ -9,6 +9,13 @@
     <header>
       <h1>Test</h1>
       <h2> <%= ENV['RACK_ENV'] %>  </h2>
+      <form action="/login" method="post">
+        <label for="login">Login</label><br />
+        <input type="text" id="login" name="login" /><br />
+        <label for="password">Hasło</label><br />
+        <input type="text" id="password" name="password" /><br />
+        <input type="submit" value="Zaloguj" />
+      <form>
     </header>
   </body>
 </html>
