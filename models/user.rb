@@ -18,7 +18,8 @@ module User
   def login_user(data)
     if user_exist?(data['login'])
       if correct_password?(data)
-        { authenticated: true, message: 'Użytkownik zalogowany' }
+        { authenticated: true, message: 'Użytkownik zalogowany', 
+          username: data('login') }
       else
         { authenticated: false, message: 'Złe hasło' }
       end

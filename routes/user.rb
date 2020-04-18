@@ -9,6 +9,7 @@ class App < Sinatra::Application
   end
 
   post '/logout' do
+    session.clear
     { authenticated: false }.to_json
   end
 
