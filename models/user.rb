@@ -18,8 +18,8 @@ module User
   def login_user(data)
     if user_exist?(data['login'])
       if correct_password?(data)
-        { authenticated: true, message: 'Użytkownik zalogowany', 
-          username: data('login') }
+        session[:username] = data['login']
+        { authenticated: true, message: 'Użytkownik zalogowany', username: data['login'] }
       else
         { authenticated: false, message: 'Złe hasło' }
       end
@@ -53,5 +53,9 @@ module User
     else
       { register: false, message: 'Użytkownik o takiej nazwie już istnieje' }
     end
+  end
+
+  def authenticated?
+    request.session[:username].to_s == session[:username].to_s && !session[:username].nil?
   end
 end
