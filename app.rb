@@ -37,13 +37,8 @@ class App < Sinatra::Application
     send_file './public/index.html'
   end
 
-  get '/:path' do
-    if authenticated?
-      { authenticated: true, path: params['path'], username: session[:username] }.to_json
-    else
-      # send_file './public/index.html'
-      redirect '/'
-    end
+  get '/*' do
+    redirect '/'
   end
 
   options '*' do

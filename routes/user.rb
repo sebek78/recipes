@@ -2,6 +2,14 @@
 
 # Routes for user
 class App < Sinatra::Application
+  get '/authenticated' do
+    if authenticated?
+      { authenticated: true, username: session[:username] }.to_json
+    else
+      { authenticated: false }.to_json
+    end
+  end
+
   post '/login' do
     request.body.rewind
     data = JSON.parse request.body.read
