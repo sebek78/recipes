@@ -3,7 +3,7 @@
 # Database methods
 module Db
   def query(sql, args)
-    conn = if ENV.fetch['RACK_ENV'] == 'production'
+    conn = if ENV['RACK_ENV'] == 'production'
              PG.connect(ENV['DATABASE_URL'])
            else
              PG.connect(dbname: 'test_db')
