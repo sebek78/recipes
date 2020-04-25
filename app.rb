@@ -23,6 +23,17 @@ configure :development do
       password: 'test-password'
 end
 
+configure :production do
+  enable :session
+  set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) }
+  set :sessions, expire_after: 2_592_000 # seconds, 30 days
+  set :database,
+      host: ENV.fetch('DB_HOST'),
+      database: ENV.fetch('DB_NAME'),
+      username: ENV.fetch('DB_USER'),
+      password: ENV.fetch('DB_PASSWORD')
+end
+
 # Main App
 class App < Sinatra::Application
   include Db
