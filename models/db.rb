@@ -9,5 +9,8 @@ module Db
              PG.connect(dbname: 'test_db')
            end
     conn.exec_params(sql, args)
+  rescue PG::Error => e
+    puts e.message
+  ensure conn&.close
   end
 end
