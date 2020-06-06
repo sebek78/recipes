@@ -16,6 +16,7 @@ configure :development do
   enable :session
   set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) }
   set :sessions, expire_after: 2_592_000 # seconds, 30 days
+  set :sessions, same_site: :strict
   set :database,
       host: 'localhost',
       database: 'test_db',
@@ -27,6 +28,7 @@ configure :production do
   enable :session
   set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) }
   set :sessions, expire_after: 2_592_000 # seconds, 30 days
+  set :sessions, same_site: :strict
 end
 
 # Main App
@@ -36,7 +38,7 @@ class App < Sinatra::Application
   include BCrypt
 
   before do
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
   end
 
   get '/' do
