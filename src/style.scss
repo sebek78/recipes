@@ -1,0 +1,14 @@
+@import "./scss/variables";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $bg-color;
+  width: 90vw;
+  margin: 0 auto;
+  font-family: "Nunito", sans-serif;
+}
