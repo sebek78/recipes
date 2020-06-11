@@ -38,7 +38,7 @@ class App < Sinatra::Application
   include BCrypt
 
   before do
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3000'
+    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
   end
 
   get '/' do

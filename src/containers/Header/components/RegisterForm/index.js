@@ -7,7 +7,7 @@ import InputText from "../../../../components/formComponents/InputText";
 import TextButton from "../../../../components/TextButton";
 import ErrorBox from "../../../../components/formComponents/ErrorBox";
 
-const RegisterUser = ({ toggleForms }) => {
+const RegisterUser = ({ toggleForms, showLoader, hideLoader }) => {
   const [formData, setFormData] = useState({
     login: "",
     password: "",
@@ -25,8 +25,10 @@ const RegisterUser = ({ toggleForms }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormData({ ...formData, error: "" });
+    showLoader();
     api.post("/register", formData).then((data) => {
       console.log(data);
+      hideLoader();
       if (data.register) {
         // setLoggedIn(true);
         // setStatus({
@@ -70,6 +72,8 @@ const RegisterUser = ({ toggleForms }) => {
 
 RegisterUser.propTypes = {
   toggleForms: PropTypes.func.isRequired,
+  showLoader: PropTypes.func.isRequired,
+  hideLoader: PropTypes.func.isRequired,
 };
 
 export default RegisterUser;

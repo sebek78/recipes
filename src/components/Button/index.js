@@ -20,6 +20,7 @@ const StyledButton = styled.button`
   outline: none;
   background-color: ${COLORS.primary};
   color: white;
+  cursor: pointer;
 `;
 
 const Button = ({ label, handleClick, submit }) => (

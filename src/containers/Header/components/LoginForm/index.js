@@ -14,7 +14,13 @@ const StyledForm = styled.form`
   align-items: center;
 `;
 
-const LoginForm = ({ setLoggedIn, setStatus, toggleForms }) => {
+const LoginForm = ({
+  setLoggedIn,
+  setStatus,
+  toggleForms,
+  showLoader,
+  hideLoader,
+}) => {
   const [formData, setFormData] = useState({
     login: "",
     password: "",
@@ -29,7 +35,9 @@ const LoginForm = ({ setLoggedIn, setStatus, toggleForms }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormData({ ...formData, error: "" });
+    showLoader();
     api.post("/login", formData).then((data) => {
+      hideLoader();
       if (data.authenticated) {
         setLoggedIn(true);
         setStatus({
@@ -67,6 +75,8 @@ LoginForm.propTypes = {
   setLoggedIn: PropTypes.func.isRequired,
   setStatus: PropTypes.func.isRequired,
   toggleForms: PropTypes.func.isRequired,
+  showLoader: PropTypes.func.isRequired,
+  hideLoader: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
