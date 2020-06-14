@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import api from "./../../../../utils/api";
 import styled from "styled-components";
 import InputText from "../../../../components/formComponents/InputText";
@@ -7,6 +8,7 @@ import Button from "../../../../components/Button";
 import MenuFormButtons from "../../../../components/formComponents/MenuFormButtons";
 import TextButton from "../../../../components/TextButton";
 import ErrorBox from "../../../../components/formComponents/ErrorBox";
+import { loginUser, loginUserSuccess } from "../../actions";
 
 const StyledForm = styled.form`
   display: flex;
@@ -20,6 +22,8 @@ const LoginForm = ({
   toggleForms,
   showLoader,
   hideLoader,
+  loginUser,
+  loginUserSuccess,
 }) => {
   const [formData, setFormData] = useState({
     login: "",
@@ -36,10 +40,12 @@ const LoginForm = ({
     e.preventDefault();
     setFormData({ ...formData, error: "" });
     showLoader();
+    loginUser(formData);
     api.post("/login", formData).then((data) => {
       hideLoader();
       if (data.authenticated) {
         setLoggedIn(true);
+        loginUserSuccess();
         setStatus({
           authenticated: data.authenticated,
           username: data.username,
@@ -77,6 +83,17 @@ LoginForm.propTypes = {
   toggleForms: PropTypes.func.isRequired,
   showLoader: PropTypes.func.isRequired,
   hideLoader: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  loginUserSuccess: PropTypes.func.isRequired,
 };
 
-export default LoginForm;
+const mapStateToProps = null;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (data) => dispatch(loginUser(data)),
+    loginUserSuccess: () => dispatch(loginUserSuccess()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

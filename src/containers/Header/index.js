@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Logo from "./components/Logo";
 import UserBox from "./components/UserBox";
@@ -18,7 +19,7 @@ const StyledHeader = styled.header`
   border-bottom: 2px solid ${COLORS.primaryDark};
 `;
 
-const Header = ({ status, setStatus }) => {
+const Header = ({ status, setStatus, isRequesting }) => {
   const [loggedIn, setLoggedIn] = useState(status.authenticated);
 
   const {
@@ -41,7 +42,7 @@ const Header = ({ status, setStatus }) => {
   return (
     <StyledHeader>
       <Logo />
-      {view.loader ? (
+      {isRequesting ? (
         <Loader />
       ) : (
         <>
@@ -85,6 +86,15 @@ Header.propTypes = {
     username: PropTypes.string,
   }).isRequired,
   setStatus: PropTypes.func.isRequired,
+  isRequesting: PropTypes.bool.isRequired,
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    isRequesting: state.userReducer.isRequesting,
+  };
+};
+
+const mapDispatchToProps = null;
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
