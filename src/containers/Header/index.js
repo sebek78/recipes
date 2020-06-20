@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Logo from "./components/Logo";
@@ -19,9 +19,7 @@ const StyledHeader = styled.header`
   border-bottom: 2px solid ${COLORS.primaryDark};
 `;
 
-const Header = ({ status, setStatus, isRequesting }) => {
-  const [loggedIn, setLoggedIn] = useState(status.authenticated);
-
+const Header = ({ isRequesting, authenticated }) => {
   const {
     view,
     openLoginForm,
@@ -35,9 +33,8 @@ const Header = ({ status, setStatus, isRequesting }) => {
   } = useView();
 
   useEffect(() => {
-    setLoggedIn(status.authenticated);
-    loggedIn ? showUserBox() : hideUserBox();
-  }, [status]);
+    authenticated ? showUserBox() : hideUserBox();
+  }, [authenticated]);
 
   return (
     <StyledHeader>
@@ -57,8 +54,6 @@ const Header = ({ status, setStatus, isRequesting }) => {
           )}
           {view.menuForms && (
             <MenuForms
-              setLoggedIn={setLoggedIn}
-              setStatus={setStatus}
               onClose={closeMenuForms}
               toggleForms={toggleForms}
               view={view}
@@ -66,14 +61,7 @@ const Header = ({ status, setStatus, isRequesting }) => {
               hideLoader={hideLoader}
             />
           )}
-          {view.userBox && (
-            <UserBox
-              setLoggedIn={setLoggedIn}
-              setStatus={setStatus}
-              showLoader={showLoader}
-              hideLoader={hideLoader}
-            />
-          )}
+          {view.userBox && <UserBox showLoader={showLoader} />}
         </>
       )}
     </StyledHeader>
@@ -81,19 +69,14 @@ const Header = ({ status, setStatus, isRequesting }) => {
 };
 
 Header.propTypes = {
-  status: PropTypes.shape({
-    authenticated: PropTypes.bool.isRequired,
-    username: PropTypes.string,
-  }).isRequired,
-  setStatus: PropTypes.func.isRequired,
   isRequesting: PropTypes.bool.isRequired,
+  authenticated: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isRequesting: state.userReducer.isRequesting,
-  };
-};
+const mapStateToProps = ({ userReducer }) => ({
+  isRequesting: userReducer.isRequesting,
+  authenticated: userReducer.authenticated,
+});
 
 const mapDispatchToProps = null;
 

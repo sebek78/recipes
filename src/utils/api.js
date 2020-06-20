@@ -14,6 +14,7 @@ async function fetchData(path, method, body) {
     return await response.json();
   } catch (err) {
     console.log("Error: ", err);
+    throw err;
   }
 }
 
