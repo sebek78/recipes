@@ -4,6 +4,7 @@ module.exports = {
     browser: true,
     commonjs: true,
     es6: true,
+    node: true,
   },
   plugins: ["react-hooks", "react"],
   extends: ["eslint:recommended", "plugin:react/recommended"],

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Logo from "./components/Logo";
 import UserBox from "./components/UserBox";
@@ -18,34 +19,29 @@ const StyledHeader = styled.header`
   border-bottom: 2px solid ${COLORS.primaryDark};
 `;
 
-const Header = ({ status, setStatus }) => {
-  const [loggedIn, setLoggedIn] = useState(status.authenticated);
-
+const Header = ({ isRequesting, authenticated }) => {
   const {
     view,
     openLoginForm,
     closeMenuForms,
     openRegisterForm,
     toggleForms,
-    showUserBox,
-    hideUserBox,
     showLoader,
     hideLoader,
   } = useView();
 
   useEffect(() => {
-    setLoggedIn(status.authenticated);
-    loggedIn ? showUserBox() : hideUserBox();
-  }, [status]);
+    console.log(authenticated);
+  }, [authenticated]);
 
   return (
     <StyledHeader>
       <Logo />
-      {view.loader ? (
+      {isRequesting ? (
         <Loader />
       ) : (
         <>
-          {view.menuButton && (
+          {!authenticated && (
             <>
               <MenuIcon openLoginForm={openLoginForm} />
               <MenuButtons
@@ -54,10 +50,8 @@ const Header = ({ status, setStatus }) => {
               />
             </>
           )}
-          {view.menuForms && (
+          {view.menuForms && !authenticated && (
             <MenuForms
-              setLoggedIn={setLoggedIn}
-              setStatus={setStatus}
               onClose={closeMenuForms}
               toggleForms={toggleForms}
               view={view}
@@ -65,14 +59,7 @@ const Header = ({ status, setStatus }) => {
               hideLoader={hideLoader}
             />
           )}
-          {view.userBox && (
-            <UserBox
-              setLoggedIn={setLoggedIn}
-              setStatus={setStatus}
-              showLoader={showLoader}
-              hideLoader={hideLoader}
-            />
-          )}
+          {authenticated && <UserBox showLoader={showLoader} />}
         </>
       )}
     </StyledHeader>
@@ -80,11 +67,15 @@ const Header = ({ status, setStatus }) => {
 };
 
 Header.propTypes = {
-  status: PropTypes.shape({
-    authenticated: PropTypes.bool.isRequired,
-    username: PropTypes.string,
-  }).isRequired,
-  setStatus: PropTypes.func.isRequired,
+  isRequesting: PropTypes.bool.isRequired,
+  authenticated: PropTypes.bool.isRequired,
 };
 
-export default Header;
+const mapStateToProps = ({ userReducer }) => ({
+  isRequesting: userReducer.isRequesting,
+  authenticated: userReducer.authenticated,
+});
+
+const mapDispatchToProps = null;
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

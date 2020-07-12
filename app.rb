@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sinatra'
+require 'encrypted_cookie'
 require 'pg'
 require 'json'
 require 'bcrypt'
@@ -13,10 +14,11 @@ require './routes/user.rb'
 configure { set :server, :puma }
 
 configure :development do
-  enable :session
-  set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) }
-  set :sessions, expire_after: 2_592_000 # seconds, 30 days
-  set :sessions, same_site: :strict
+  use Rack::Session::EncryptedCookie,
+      secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) },
+      path: '/',
+      expire_after: 2_592_000 # In seconds
+
   set :database,
       host: 'localhost',
       database: 'test_db',
@@ -25,10 +27,11 @@ configure :development do
 end
 
 configure :production do
-  enable :session
-  set :session_secret, ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) }
-  set :sessions, expire_after: 2_592_000 # seconds, 30 days
-  set :sessions, same_site: :strict
+  use Rack::Session::EncryptedCookie,
+      secret: ENV.fetch('SESSION_SECRET') { SecureRandom.hex(64) },
+      path: '/',
+      expire_after: 2_592_000, # In seconds
+      same_site: :strict
 end
 
 # Main App
@@ -39,6 +42,7 @@ class App < Sinatra::Application
 
   before do
     response.headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
   end
 
   get '/' do

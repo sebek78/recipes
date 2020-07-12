@@ -1,37 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Header from "../Header";
 import Menu from "../Menu";
 import AboutPage from "../AboutPage";
 import HomePage from "../HomePage";
 import PageNotFound from "../PageNotFound";
-import api from "./../../utils/api";
+import { checkUserAuthenticated } from "./actions";
+import MainView from "./../MainView";
 
-const App = () => {
-  const [status, setStatus] = useState({
-    authenticated: false,
-    username: undefined,
-  });
+const App = ({ authenticated, checkUserAuthenticated }) => {
   useEffect(() => {
-    api.get("/authenticated").then((data) => {
-      setStatus({
-        authenticated: data.authenticated,
-        username: data.username,
-      });
-    });
+    checkUserAuthenticated();
   }, []);
 
   return (
     <>
-      <Header status={status} setStatus={setStatus} />
-      <Menu authenticated={status.authenticated} />
+      <Header />
+      <Menu />
       <Switch>
         <Route path="/about" component={AboutPage} />
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={authenticated ? MainView : HomePage} />
         <Route path="*" component={PageNotFound} />
       </Switch>
     </>
   );
 };
 
-export default App;
+App.propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  checkUserAuthenticated: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = ({ userReducer }) => ({
+  authenticated: userReducer.authenticated,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  checkUserAuthenticated: () => dispatch(checkUserAuthenticated()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

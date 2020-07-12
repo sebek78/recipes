@@ -29,15 +29,7 @@ const CloseButtonWrapper = styled.div`
   top: 4px;
 `;
 
-const MenuForms = ({
-  setLoggedIn,
-  setStatus,
-  onClose,
-  toggleForms,
-  view,
-  showLoader,
-  hideLoader,
-}) => {
+const MenuForms = ({ onClose, toggleForms, view, showLoader, hideLoader }) => {
   return (
     <FormContainer>
       <CloseButtonWrapper>
@@ -51,21 +43,13 @@ const MenuForms = ({
         />
       )}
       {view.loginForm && (
-        <LoginForm
-          setLoggedIn={setLoggedIn}
-          setStatus={setStatus}
-          toggleForms={toggleForms}
-          showLoader={showLoader}
-          hideLoader={hideLoader}
-        />
+        <LoginForm toggleForms={toggleForms} showLoader={showLoader} />
       )}
     </FormContainer>
   );
 };
 
 MenuForms.propTypes = {
-  setLoggedIn: PropTypes.func.isRequired,
-  setStatus: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   toggleForms: PropTypes.func.isRequired,
   showLoader: PropTypes.func.isRequired,

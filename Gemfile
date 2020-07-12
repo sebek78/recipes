@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 ruby '2.6.6'
 
 gem 'bcrypt'
+gem 'encrypted_cookie'
 gem 'json'
 gem 'pg'
 gem 'puma'

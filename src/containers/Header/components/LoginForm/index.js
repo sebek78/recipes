@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import api from "./../../../../utils/api";
+import { connect } from "react-redux";
 import styled from "styled-components";
 import InputText from "../../../../components/formComponents/InputText";
 import Button from "../../../../components/Button";
 import MenuFormButtons from "../../../../components/formComponents/MenuFormButtons";
 import TextButton from "../../../../components/TextButton";
 import ErrorBox from "../../../../components/formComponents/ErrorBox";
+import { loginUser } from "../../actions";
 
 const StyledForm = styled.form`
   display: flex;
@@ -14,18 +15,16 @@ const StyledForm = styled.form`
   align-items: center;
 `;
 
-const LoginForm = ({
-  setLoggedIn,
-  setStatus,
-  toggleForms,
-  showLoader,
-  hideLoader,
-}) => {
+const LoginForm = ({ toggleForms, showLoader, loginUser, message }) => {
   const [formData, setFormData] = useState({
     login: "",
     password: "",
     error: "",
   });
+
+  useEffect(() => {
+    if (message) setFormData({ ...formData, error: message });
+  }, [message]);
 
   const handleChangeLogin = (e) =>
     setFormData({ ...formData, login: e.target.value });
@@ -36,19 +35,9 @@ const LoginForm = ({
     e.preventDefault();
     setFormData({ ...formData, error: "" });
     showLoader();
-    api.post("/login", formData).then((data) => {
-      hideLoader();
-      if (data.authenticated) {
-        setLoggedIn(true);
-        setStatus({
-          authenticated: data.authenticated,
-          username: data.username,
-        });
-      } else {
-        setFormData({ ...formData, error: data.message });
-      }
-    });
+    loginUser(formData);
   };
+
   return (
     <StyledForm onSubmit={handleSubmit}>
       <InputText
@@ -72,11 +61,18 @@ const LoginForm = ({
 };
 
 LoginForm.propTypes = {
-  setLoggedIn: PropTypes.func.isRequired,
-  setStatus: PropTypes.func.isRequired,
   toggleForms: PropTypes.func.isRequired,
   showLoader: PropTypes.func.isRequired,
-  hideLoader: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  message: PropTypes.string,
 };
 
-export default LoginForm;
+const mapStateToProps = ({ userReducer }) => ({
+  message: userReducer.message,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loginUser: (data) => dispatch(loginUser(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
