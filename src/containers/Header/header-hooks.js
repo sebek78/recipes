@@ -6,7 +6,6 @@ export const useView = () => {
     loginForm: true,
     registerForm: false,
     menuForms: false,
-    userBox: false,
   });
 
   const openLoginForm = (e) => {
@@ -38,12 +37,6 @@ export const useView = () => {
     });
   };
 
-  const showUserBox = () =>
-    setView({ ...view, menuForms: false, userBox: true });
-
-  const hideUserBox = () =>
-    setView({ ...view, menuButton: true, userBox: false });
-
   const showLoader = () => setView({ ...view, loader: true });
   const hideLoader = () => setView({ ...view, loader: false });
 
@@ -53,8 +46,6 @@ export const useView = () => {
     closeMenuForms,
     openRegisterForm,
     toggleForms,
-    showUserBox,
-    hideUserBox,
     showLoader,
     hideLoader,
   };

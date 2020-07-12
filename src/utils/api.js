@@ -2,7 +2,8 @@ async function fetchData(path, method, body) {
   const request = {
     method,
     headers: { "Content-Type": "text/html" },
-    credentials: "same-origin",
+    credentials:
+      window.location.hostname === "localhost" ? "include" : "same-origin",
   };
   if (body) request.body = JSON.stringify(body);
   const url =

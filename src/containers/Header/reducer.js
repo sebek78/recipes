@@ -7,10 +7,16 @@ import {
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_FAILURE,
 } from "./actionTypes";
+import {
+  USER_AUTHENTICATED_REQUEST,
+  USER_AUTHENTICATED_SUCCESS,
+  USER_AUTHENTICATED_FAILURE,
+} from "./../App/actionTypes";
 
 const initialState = {
   authenticated: false,
   isRequesting: false,
+  isCheckingAuthenticated: false,
   message: null,
   username: null,
 };
@@ -42,6 +48,19 @@ const userReducer = produce((draft, { type, payload }) => {
     case USER_LOGOUT_FAILURE:
       draft.isRequesting = false;
       draft.message = payload.error.message;
+      break;
+    case USER_AUTHENTICATED_REQUEST:
+      draft.isCheckingAuthenticated = true;
+      break;
+    case USER_AUTHENTICATED_SUCCESS:
+      draft.isCheckingAuthenticated = false;
+      draft.authenticated = payload.authData.authenticated;
+      draft.username = payload.authData.username || null;
+      break;
+    case USER_AUTHENTICATED_FAILURE:
+      draft.isCheckingAuthenticated = false;
+      draft.authenticated = payload.authData.authenticated;
+      draft.username = null;
       break;
   }
 }, initialState);

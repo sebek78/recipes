@@ -26,14 +26,12 @@ const Header = ({ isRequesting, authenticated }) => {
     closeMenuForms,
     openRegisterForm,
     toggleForms,
-    showUserBox,
-    hideUserBox,
     showLoader,
     hideLoader,
   } = useView();
 
   useEffect(() => {
-    authenticated ? showUserBox() : hideUserBox();
+    console.log(authenticated);
   }, [authenticated]);
 
   return (
@@ -43,7 +41,7 @@ const Header = ({ isRequesting, authenticated }) => {
         <Loader />
       ) : (
         <>
-          {view.menuButton && (
+          {!authenticated && (
             <>
               <MenuIcon openLoginForm={openLoginForm} />
               <MenuButtons
@@ -52,7 +50,7 @@ const Header = ({ isRequesting, authenticated }) => {
               />
             </>
           )}
-          {view.menuForms && (
+          {view.menuForms && !authenticated && (
             <MenuForms
               onClose={closeMenuForms}
               toggleForms={toggleForms}
@@ -61,7 +59,7 @@ const Header = ({ isRequesting, authenticated }) => {
               hideLoader={hideLoader}
             />
           )}
-          {view.userBox && <UserBox showLoader={showLoader} />}
+          {authenticated && <UserBox showLoader={showLoader} />}
         </>
       )}
     </StyledHeader>
