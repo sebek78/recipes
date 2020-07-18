@@ -19,7 +19,7 @@ const StyledHeader = styled.header`
   border-bottom: 2px solid ${COLORS.primaryDark};
 `;
 
-const Header = ({ isRequesting, authenticated }) => {
+const Header = ({ isRequesting, authenticated, register }) => {
   const {
     view,
     openLoginForm,
@@ -31,8 +31,8 @@ const Header = ({ isRequesting, authenticated }) => {
   } = useView();
 
   useEffect(() => {
-    console.log(authenticated);
-  }, [authenticated]);
+    if (authenticated) closeMenuForms();
+  }, [authenticated, register]);
 
   return (
     <StyledHeader>
@@ -69,11 +69,13 @@ const Header = ({ isRequesting, authenticated }) => {
 Header.propTypes = {
   isRequesting: PropTypes.bool.isRequired,
   authenticated: PropTypes.bool.isRequired,
+  register: PropTypes.bool,
 };
 
 const mapStateToProps = ({ userReducer }) => ({
   isRequesting: userReducer.isRequesting,
   authenticated: userReducer.authenticated,
+  regiseter: userReducer.register,
 });
 
 const mapDispatchToProps = null;

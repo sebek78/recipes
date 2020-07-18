@@ -5,6 +5,9 @@ import {
   USER_LOGOUT_REQUEST,
   USER_LOGOUT_SUCCESS,
   USER_LOGOUT_FAILURE,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
+  USER_REGISTER_FAILURE,
 } from "./actionTypes";
 
 export const loginUser = (loginData) => ({
@@ -41,6 +44,27 @@ export const logoutUserSuccess = (authData) => ({
 
 export const logoutUserFailure = (error) => ({
   type: USER_LOGOUT_FAILURE,
+  payload: {
+    error,
+  },
+});
+
+export const registerUser = (registerData) => ({
+  type: USER_REGISTER_REQUEST,
+  payload: {
+    registerData,
+  },
+});
+
+export const registerUserSuccess = (registerData) => ({
+  type: USER_REGISTER_SUCCESS,
+  payload: {
+    registerData,
+  },
+});
+
+export const registerUserFailure = (error) => ({
+  type: USER_REGISTER_FAILURE,
   payload: {
     error,
   },

@@ -1,19 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Button from "../../../../components/Button";
 import MenuFormButtons from "../../../../components/formComponents/MenuFormButtons";
-import api from "../../../../utils/api";
 import InputText from "../../../../components/formComponents/InputText";
 import TextButton from "../../../../components/TextButton";
 import ErrorBox from "../../../../components/formComponents/ErrorBox";
+import { registerUser } from "../../actions";
+import { useView } from "../../header-hooks";
 
-const RegisterUser = ({ toggleForms, showLoader, hideLoader }) => {
+const RegisterUser = ({
+  toggleForms,
+  showLoader,
+  hideLoader,
+  registerUser,
+  isRequesting,
+  register,
+  message,
+}) => {
   const [formData, setFormData] = useState({
     login: "",
     password: "",
     password2: "",
     error: "",
   });
+
+  const { closeMenuForms } = useView();
+
+  useEffect(() => {
+    isRequesting ? showLoader() : hideLoader();
+    if (register !== null) setFormData({ ...formData, error: message });
+    if (register) closeMenuForms();
+    if (message === null) setFormData({ ...formData, error: "" });
+  }, [isRequesting, register]);
 
   const handleChangeLogin = (e) =>
     setFormData({ ...formData, login: e.target.value });
@@ -25,21 +44,7 @@ const RegisterUser = ({ toggleForms, showLoader, hideLoader }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormData({ ...formData, error: "" });
-    showLoader();
-    api.post("/register", formData).then((data) => {
-      console.log(data);
-      hideLoader();
-      if (data.register) {
-        // setLoggedIn(true);
-        // setStatus({
-        //   authenticated: data.authenticated,
-        //   username: data.username,
-        // });
-        setFormData({ ...formData, error: data.message });
-      } else {
-        setFormData({ ...formData, error: data.message });
-      }
-    });
+    registerUser(formData);
   };
 
   return (
@@ -74,6 +79,20 @@ RegisterUser.propTypes = {
   toggleForms: PropTypes.func.isRequired,
   showLoader: PropTypes.func.isRequired,
   hideLoader: PropTypes.func.isRequired,
+  registerUser: PropTypes.func.isRequired,
+  register: PropTypes.bool,
+  isRequesting: PropTypes.bool.isRequired,
+  message: PropTypes.string,
 };
 
-export default RegisterUser;
+const mapStateToProps = ({ userReducer }) => ({
+  message: userReducer.message,
+  isRequesting: userReducer.isRequesting,
+  register: userReducer.register,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  registerUser: (data) => dispatch(registerUser(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterUser);
