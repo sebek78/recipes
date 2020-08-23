@@ -22,8 +22,8 @@ configure :development do
   set :database,
       host: 'localhost',
       database: 'test_db',
-      username: 'sebekpraca',
-      password: 'test-password'
+      username: 'Sebastian',
+      password: 'dbadmin'
 end
 
 configure :production do
