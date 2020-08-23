@@ -9,7 +9,7 @@ import HomePage from "../HomePage";
 import PageNotFound from "../PageNotFound";
 import { checkUserAuthenticated } from "./actions";
 import MainView from "./../MainView";
-
+import SettingsPage from "./../SettingsPage";
 const App = ({ authenticated, checkUserAuthenticated }) => {
   useEffect(() => {
     checkUserAuthenticated();
@@ -20,6 +20,7 @@ const App = ({ authenticated, checkUserAuthenticated }) => {
       <Header />
       <Menu />
       <Switch>
+        <Route path="/settings" component={SettingsPage} />
         <Route path="/about" component={AboutPage} />
         <Route exact path="/" component={authenticated ? MainView : HomePage} />
         <Route path="*" component={PageNotFound} />
