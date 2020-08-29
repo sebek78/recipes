@@ -9,14 +9,14 @@ import {
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAILURE,
-} from "./actionTypes";
+} from "../Header/actionTypes";
 import {
   USER_AUTHENTICATED_REQUEST,
   USER_AUTHENTICATED_SUCCESS,
   USER_AUTHENTICATED_FAILURE,
-} from "./../App/actionTypes";
+} from "./actionTypes";
 
-const initialState = {
+export const initialState = {
   authenticated: false,
   isRequesting: false,
   register: null,

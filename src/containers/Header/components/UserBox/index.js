@@ -5,13 +5,13 @@ import TextButton from "../../../../components/TextButton";
 import { logoutUser } from "../../actions";
 import DropdownMenu from "../../../../components/DropdownMenu";
 
-const UserBox = ({ showLoader, logoutUser }) => {
+const UserBox = ({ showLoader, logoutUser, username }) => {
   const [isMenuOpen, toggleMenuOpen] = useState(false);
 
   return (
     <>
       <TextButton
-        label="TEST USER"
+        label={username}
         handleClick={() => toggleMenuOpen(!isMenuOpen)}
       />
       {isMenuOpen && (
@@ -28,6 +28,7 @@ const UserBox = ({ showLoader, logoutUser }) => {
 UserBox.propTypes = {
   showLoader: PropTypes.func.isRequired,
   logoutUser: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = null;
