@@ -10,6 +10,13 @@ import styled from "styled-components";
 import { COLORS } from "../../utils/theme";
 import { useView } from "./header-hooks";
 import Loader from "../../components/Loader";
+import { createStructuredSelector } from "reselect";
+import {
+  makeSelectUsername,
+  makeSelectIsRequesting,
+  makeSelectAuthenticated,
+  makeSelectRegister,
+} from "../App/selectors";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -19,7 +26,7 @@ const StyledHeader = styled.header`
   border-bottom: 2px solid ${COLORS.primaryDark};
 `;
 
-const Header = ({ isRequesting, authenticated }) => {
+const Header = ({ isRequesting, authenticated, register, username }) => {
   const {
     view,
     openLoginForm,
@@ -31,8 +38,8 @@ const Header = ({ isRequesting, authenticated }) => {
   } = useView();
 
   useEffect(() => {
-    console.log(authenticated);
-  }, [authenticated]);
+    if (authenticated) closeMenuForms();
+  }, [authenticated, register]);
 
   return (
     <StyledHeader>
@@ -59,7 +66,9 @@ const Header = ({ isRequesting, authenticated }) => {
               hideLoader={hideLoader}
             />
           )}
-          {authenticated && <UserBox showLoader={showLoader} />}
+          {authenticated && (
+            <UserBox showLoader={showLoader} username={username} />
+          )}
         </>
       )}
     </StyledHeader>
@@ -69,11 +78,15 @@ const Header = ({ isRequesting, authenticated }) => {
 Header.propTypes = {
   isRequesting: PropTypes.bool.isRequired,
   authenticated: PropTypes.bool.isRequired,
+  register: PropTypes.bool,
+  username: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = ({ userReducer }) => ({
-  isRequesting: userReducer.isRequesting,
-  authenticated: userReducer.authenticated,
+const mapStateToProps = createStructuredSelector({
+  isRequesting: makeSelectIsRequesting,
+  authenticated: makeSelectAuthenticated,
+  regiseter: makeSelectRegister,
+  username: makeSelectUsername,
 });
 
 const mapDispatchToProps = null;

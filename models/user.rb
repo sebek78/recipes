@@ -39,8 +39,10 @@ module User
       username: data['login'] }
   end
 
-  def send_message(message)
-    { authenticated: false, message: message }
+  def send_message(message, action)
+    res = { message: message }
+    res[action] = false
+    res
   end
 
   def check_login(data)
@@ -54,7 +56,7 @@ module User
 
   def login_user(data)
     message = check_login(data)
-    message ? send_message(message) : user_session(data)
+    message ? send_message(message, 'authenticated') : user_session(data)
   end
 
   def passwords_equals?(password, password2)
@@ -69,7 +71,8 @@ module User
     password = encrypt_password(data['password'])
     sql = 'INSERT INTO users(username,password,created_on) VALUES ($1,$2,NOW())'
     query(sql, [data['login'], password])
-    { register: true, message: 'Użytkownik dodany.' }
+    { register: true, message: 'Użytkownik dodany.',
+      authenticated: true, username: data['login'] }
   end
 
   def valid_register_inputs?(data)
@@ -91,7 +94,7 @@ module User
 
   def register_user(data)
     message = check_register(data)
-    message ? send_message(message) : add_new_user(data)
+    message ? send_message(message, 'register') : add_new_user(data)
   end
 
   def authenticated?

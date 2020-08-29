@@ -3,29 +3,41 @@ import { useState } from "react";
 export const useView = () => {
   const [view, setView] = useState({
     menuButton: true,
-    loginForm: true,
-    registerForm: false,
     menuForms: false,
+    loginForm: false,
+    registerForm: false,
+    loader: false,
   });
 
   const openLoginForm = (e) => {
     e.preventDefault();
-    setView({ ...view, menuForms: true, menuButton: false });
+    setView({
+      ...view,
+      menuButton: false,
+      menuForms: true,
+      loginForm: true,
+      registerForm: false,
+    });
   };
 
   const openRegisterForm = (e) => {
     e.preventDefault();
     setView({
       ...view,
-      menuForms: true,
       menuButton: false,
-      registerForm: true,
+      menuForms: true,
       loginForm: false,
-      loader: false,
+      registerForm: true,
     });
   };
   const closeMenuForms = () => {
-    setView({ ...view, menuForms: false, menuButton: true });
+    setView({
+      ...view,
+      menuButton: true,
+      menuForms: false,
+      registerForm: false,
+      loginForm: false,
+    });
   };
 
   const toggleForms = (e) => {
